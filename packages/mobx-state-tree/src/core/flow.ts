@@ -92,9 +92,9 @@ export function createFlowSpawner(name: string, generator: Function) {
                     wrap((r: any) => { ret = gen.next(r) }, "flow_resume", res)
                 } catch (e) {
                     // prettier-ignore
-                    setImmediate(() => {
+                    setTimeout(() => {
                         wrap((r: any) => { reject(e) }, "flow_throw", e)
-                    })
+                    }, 0)
                     return
                 }
                 next(ret)
@@ -108,9 +108,9 @@ export function createFlowSpawner(name: string, generator: Function) {
                     wrap((r: any) => { ret = gen.throw(r) }, "flow_resume_error", err) // or yieldError?
                 } catch (e) {
                     // prettier-ignore
-                    setImmediate(() => {
+                    setTimeout(() => {
                         wrap((r: any) => { reject(e) }, "flow_throw", e)
-                    })
+                    }, 0)
                     return
                 }
                 next(ret)
@@ -119,9 +119,9 @@ export function createFlowSpawner(name: string, generator: Function) {
             function next(ret: any) {
                 if (ret.done) {
                     // prettier-ignore
-                    setImmediate(() => {
+                    setTimeout(() => {
                         wrap((r: any) => { resolve(r) }, "flow_return", ret.value)
-                    })
+                    }, 0)
                     return
                 }
                 // TODO: support more type of values? See https://github.com/tj/co/blob/249bbdc72da24ae44076afd716349d2089b31c4c/index.js#L100
